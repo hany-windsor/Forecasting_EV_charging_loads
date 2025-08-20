@@ -1,0 +1,8 @@
+Forecaster,Importance
+yhat_lstm,0.5926142283263459
+yhat_prophet,0.4035937718854049
+hour,0.002248612296297146
+cumulative_mse_yhat_lstm,0.0012540954114467434
+cumulative_mse_yhat_prophet,0.00017749271095405256
+day_of_week,0.00011179936955123544
+month,0.0

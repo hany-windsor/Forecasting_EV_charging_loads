@@ -1,0 +1,10 @@
+params,mse,mae,mape
+"{'seasonal_periods': (24,), 'trend': False, 'damped_trend': False, 'use_arma_errors': True, 'p': 2, 'q': 2, 'use_box_cox': 'auto'}",103.63413477297732,7.808001123285126,0.8694276892386603
+"{'seasonal_periods': (24,), 'trend': False, 'damped_trend': False, 'use_arma_errors': True, 'p': 2, 'q': 4, 'use_box_cox': 'auto'}",103.63413477297732,7.808001123285126,0.8694276892386603
+"{'seasonal_periods': (24,), 'trend': False, 'damped_trend': False, 'use_arma_errors': True, 'p': 2, 'q': 6, 'use_box_cox': 'auto'}",103.63413477297732,7.808001123285126,0.8694276892386603
+"{'seasonal_periods': (24,), 'trend': False, 'damped_trend': False, 'use_arma_errors': True, 'p': 4, 'q': 2, 'use_box_cox': 'auto'}",103.63413477297732,7.808001123285126,0.8694276892386603
+"{'seasonal_periods': (24,), 'trend': False, 'damped_trend': False, 'use_arma_errors': True, 'p': 4, 'q': 4, 'use_box_cox': 'auto'}",103.63413477297732,7.808001123285126,0.8694276892386603
+"{'seasonal_periods': (24,), 'trend': False, 'damped_trend': False, 'use_arma_errors': True, 'p': 4, 'q': 6, 'use_box_cox': 'auto'}",103.63413477297732,7.808001123285126,0.8694276892386603
+"{'seasonal_periods': (24,), 'trend': False, 'damped_trend': False, 'use_arma_errors': True, 'p': 6, 'q': 2, 'use_box_cox': 'auto'}",103.63413477297732,7.808001123285126,0.8694276892386603
+"{'seasonal_periods': (24,), 'trend': False, 'damped_trend': False, 'use_arma_errors': True, 'p': 6, 'q': 4, 'use_box_cox': 'auto'}",103.63413477297732,7.808001123285126,0.8694276892386603
+"{'seasonal_periods': (24,), 'trend': False, 'damped_trend': False, 'use_arma_errors': True, 'p': 6, 'q': 6, 'use_box_cox': 'auto'}",103.63413477297732,7.808001123285126,0.8694276892386603

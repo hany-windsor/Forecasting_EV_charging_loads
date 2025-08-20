@@ -1,0 +1,14 @@
+Best Parameters:
+Head Size: 15, Population Size: 400, Number of Genes: 9
+Train MSE: 47.030353340878165
+Best Model Equation: custom_linker(
+	protected_div(1, yhat_prophet),
+	protected_log(2),
+	sub(protected_exp(protected_div(1, yhat_prophet)), 2),
+	protected_div(protected_exp(3), cumulative_mse_yhat_prophet),
+	protected_div(cumulative_mse_yhat_lstm, cumulative_mse_yhat_lstm),
+	protected_div(yhat_lstm, protected_exp(protected_exp(protected_div(yhat_tbats, yhat_prophet)))),
+	protected_div(sub(sub(2, 3), yhat_tbats), cumulative_mse_yhat_prophet),
+	sub(yhat_tbats, 2),
+	protected_log(protected_log(month))
+)
