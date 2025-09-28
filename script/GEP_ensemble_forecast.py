@@ -9,7 +9,23 @@ import operator
 import time
 import shap
 from sklearn.preprocessing import StandardScaler
+from deap import creator
 import random
+import os, numpy as np
+
+
+os.environ["PYTHONHASHSEED"] = "50"
+SEED = 50
+random.seed(SEED)
+np.random.seed(SEED)
+
+
+
+if not hasattr(creator, "FitnessMin"):
+    creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
+if not hasattr(creator, "Individual"):
+    creator.create("Individual", gep.Chromosome, fitness=creator.FitnessMin)
+
 
 def GEP_ensemble(date_range, ensemble_composition, time_series_data_training, time_series_data_testing):
     # Features and target for training
@@ -81,7 +97,6 @@ def GEP_ensemble(date_range, ensemble_composition, time_series_data_training, ti
     pset.add_constant_terminal(3)
     pset.add_function(slog, 1)
     pset.add_function(tanh_, 1)
-    # Optionally include trig only if you have clear seasonality features present:
     pset.add_function(sin_, 1)
     pset.add_function(cos_, 1)
     pset.add_ephemeral_terminal('ERC_WIDE', erc_wide)
@@ -141,6 +156,9 @@ def GEP_ensemble(date_range, ensemble_composition, time_series_data_training, ti
 
     # Perform grid search
     for head_size, n_pop, n_genes in param_combinations:
+
+        random.seed(SEED)
+        np.random.seed(SEED)
         print(f"Testing combination: head_size={head_size}, n_pop={n_pop}, n_genes={n_genes}")
 
         # Update toolbox with new parameters

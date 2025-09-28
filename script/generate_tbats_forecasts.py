@@ -4,7 +4,11 @@ import pandas as pd
 
 if __name__ == "__main__":
 
-    list_of_dates = ["2022-09-01_2022-11-30_load_per_hour_no_cleaning.csv","2022-12-01_2023-02-28_load_per_hour_no_cleaning.csv","2023-03-01_2023-05-31_load_per_hour_no_cleaning.csv", "2023-06-01_2023-08-31_load_per_hour_no_cleaning.csv"]
+    # Runs on cleaned data (outlier detection and imputation)
+    list_of_dates = ["2022-09-01_2022-11-30_load_per_hour.csv","2022-12-01_2023-02-28_load_per_hour.csv","2023-03-01_2023-05-31_load_per_hour.csv", "2023-06-01_2023-08-31_load_per_hour.csv"]
+
+    # Runs on uncleaned data
+    #list_of_dates = ["2022-09-01_2022-11-30_load_per_hour_no_cleaning.csv","2022-12-01_2023-02-28_load_per_hour_no_cleaning.csv","2023-03-01_2023-05-31_load_per_hour_no_cleaning.csv","2023-06-01_2023-08-31_load_per_hour_no_cleaning.csv"]
 
     training_time = {}
     for input_file_name in list_of_dates:

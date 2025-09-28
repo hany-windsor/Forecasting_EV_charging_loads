@@ -6,7 +6,7 @@ from sklearn.metrics import r2_score, mean_squared_error
 import re
 
 
-input_filename = "../data/ensemble_data_with_context_2023-06-01_2023-08-31.csv"
+input_filename = "../data/ensemble_data_with_context_2022-09-01_2022-11-30.csv"
 
 ensemble_data= pd.read_csv(input_filename)
 
@@ -27,9 +27,9 @@ test_sizes = []
 # Define the parameter grid
 param_values= {
     'n_estimators': 1000,
-    'max_depth': 10,
-    'min_samples_split': 2,
-    'min_samples_leaf': 1,
+    'max_depth': 5,
+    'min_samples_split': 10,
+    'min_samples_leaf': 4,
     'max_features': 'sqrt',
     'bootstrap': True,
     'random_state': 50

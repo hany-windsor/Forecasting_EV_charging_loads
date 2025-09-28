@@ -7,6 +7,13 @@ import geppy as gep
 from sklearn.model_selection import TimeSeriesSplit
 from sklearn.metrics import r2_score, mean_squared_error
 from deap import creator, base, tools
+import random
+import os
+
+os.environ["PYTHONHASHSEED"] = "50"
+SEED = 50
+random.seed(SEED)
+np.random.seed(SEED)
 
 def protected_div(x1, x2):
     return x1 / (x2 + 1e-10)
@@ -32,7 +39,7 @@ def custom_linker(*args):
 
 
 # Load and prepare data
-input_filename = "../data/ensemble_data_with_context_2022-09-01_2022-11-30.csv"
+input_filename = "../data/ensemble_data_with_context_2022-12-01_2023-02-28.csv"
 ensemble_data = pd.read_csv(input_filename)
 date_range = re.search(r"\d{4}-\d{2}-\d{2}_\d{4}-\d{2}-\d{2}", input_filename).group()
 

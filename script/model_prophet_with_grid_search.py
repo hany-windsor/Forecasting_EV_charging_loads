@@ -6,6 +6,12 @@ from itertools import product
 import logging
 import matplotlib.pyplot as plt
 import time
+import random
+import numpy as np
+
+seed = 50
+random.seed(seed)
+np.random.seed(seed)
 
 # Suppress cmdstanpy logs
 logging.getLogger('cmdstanpy').setLevel(logging.WARNING)
@@ -66,12 +72,13 @@ def prophet_forecasts(input_file,date_range):
             yearly_seasonality=True,
             #changepoint_prior_scale=params['changepoint_prior_scale'],
             seasonality_prior_scale=params['seasonality_prior_scale'],
-            holidays_prior_scale=params['holidays_prior_scale']
+            holidays_prior_scale=params['holidays_prior_scale'],
+            uncertainty_samples = 0  # <-- deterministic outputs
         )
         model.add_seasonality(name='daily', period=24, fourier_order=5)
 
         # Fit the model
-        model.fit(train_df[['ds', 'y']])
+        model.fit(train_df[['ds', 'y']], seed=seed)
 
         # Create future dataframe and forecast
         prediction_length = len(test_df)
@@ -141,12 +148,12 @@ def prophet_forecasts(input_file,date_range):
 
     # Calculate metrics
     train_mse_best = mean_squared_error(train_df['y'], fitted_values['yhat'])
-    test_mse_best = mean_squared_error(test_df['y'], forecast_testing['yhat'])
     train_mape_best = mean_absolute_percentage_error(train_df['y'], fitted_values['yhat'])
-    test_mape_best = mean_absolute_percentage_error(test_df['y'], forecast_testing['yhat'])
     train_mae_best = mean_absolute_error(train_df['y'], fitted_values['yhat'])
-    test_mae_best = mean_absolute_error(test_df['y'], forecast_testing['yhat'])
     train_r2_best = r2_score(train_df['y'], fitted_values['yhat'])
+    test_mse_best = mean_squared_error(test_df['y'], forecast_testing['yhat'])
+    test_mape_best = mean_absolute_percentage_error(test_df['y'], forecast_testing['yhat'])
+    test_mae_best = mean_absolute_error(test_df['y'], forecast_testing['yhat'])
     test_r2_best = r2_score(test_df['y'], forecast_testing['yhat'])
 
     # Define metrics
@@ -187,7 +194,7 @@ def prophet_forecasts(input_file,date_range):
     plt.figure(figsize=(12, 6))
     plt.plot(test_df['ds'], test_df['y'], label='Actual (Testing Set)', color='blue', alpha=0.6)
     plt.plot(forecast_testing['date'], forecast_testing['yhat'], label='Forecasted Values', color='green', alpha=0.8)
-    plt.title(f'Prophet_best_model_Testing Set: Actual vs Forecasted Values: MSE = {test_mse_best:.2f}')
+    plt.title(f'Prophet_best_model_Testing Set: Actual vs Forecasted Values')
     plt.xlabel('Date')
     plt.ylabel('Load')
     plt.legend()
@@ -218,7 +225,7 @@ def prophet_forecasts(input_file,date_range):
     plt.figure(figsize=(8, 6))
     plt.scatter(test_df['y'], forecast_testing['yhat'], alpha=0.6, color='green', label='Testing Data')
     #plt.plot(np.unique(testY_actual), np.unique(testY_actual), color='red', label='Ideal Fit')
-    plt.title(f'Prophet-Testing Set: Actual vs Forecasted Values (R² = {test_r2_best :.2f})')
+    plt.title(f'Prophet-Testing Set: Actual vs Forecasted Values')
     plt.xlabel('Actual Load')
     plt.ylabel('Forecasted Load')
     plt.legend()

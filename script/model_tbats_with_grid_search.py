@@ -4,6 +4,12 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, mean_absolu
 from itertools import product
 import matplotlib.pyplot as plt
 import time
+import random, numpy as np
+
+
+seed = 42
+random.seed(seed)
+np.random.seed(seed)
 
 
 def tbats_forecasts(input_file, date_range):
@@ -33,6 +39,7 @@ def tbats_forecasts(input_file, date_range):
         'p': [2, 4, 6],  # AR order
         'q': [2, 4, 6],  # MA order
         'use_box_cox': ["auto"]  # Box-Cox transformation
+
     }
 
     # Create all combinations of parameters
@@ -56,6 +63,7 @@ def tbats_forecasts(input_file, date_range):
             use_trend=params['trend'],
             use_damped_trend=params['damped_trend'],
             use_arma_errors=params['use_arma_errors'],
+            n_jobs=1  # <- avoid parallel nondeterminism
         )
         model = estimator.fit(train_series)
 
@@ -91,19 +99,20 @@ def tbats_forecasts(input_file, date_range):
 
     # Calculate metrics
     train_mse_best = round(mean_squared_error(train_df['load'], best_fitted_values),2)
-    test_mse_best = round(mean_squared_error(test_df['load'], best_forecasted_values),2)
     train_mape_best = round(mean_absolute_percentage_error(train_df['load'], best_fitted_values),2)
-    test_mape_best = round(mean_absolute_percentage_error(test_df['load'], best_forecasted_values),2)
     train_mae_best = round(mean_absolute_error(train_df['load'], best_fitted_values),2)
-    test_mae_best = round(mean_absolute_error(test_df['load'], best_forecasted_values),2)
     train_r2_best = round(r2_score(train_df['load'], best_fitted_values),2)
+    test_mse_best = round(mean_squared_error(test_df['load'], best_forecasted_values),2)
+    test_mape_best = round(mean_absolute_percentage_error(test_df['load'], best_forecasted_values),2)
+    test_mae_best = round(mean_absolute_error(test_df['load'], best_forecasted_values),2)
     test_r2_best = round(r2_score(test_df['load'], best_forecasted_values),2)
+
 
     # Define metrics
     metrics = {
         'Metric': ['MSE', 'MAPE', 'MAE', 'R2'],
         'Train': [train_mse_best, train_mape_best, train_mae_best, train_r2_best],
-        'Test': [test_mse_best, test_mape_best, test_mae_best, test_r2_best]
+        'Test': [test_mse_best, test_mape_best, test_mae_best, test_r2_best],
     }
 
     # Create DataFrame
@@ -149,7 +158,7 @@ def tbats_forecasts(input_file, date_range):
     plt.figure(figsize=(12, 6))
     plt.plot(test_df['date'], test_df['load'], label='Actual (Testing Set)', color='blue', alpha=0.7)
     plt.plot(test_df['date'], best_forecasted_values, label='Forecasted Values', color='green', alpha=0.7)
-    plt.title(f'TBATS Model: Forecasted vs Actual (Testing Set)\nMSE: {test_mse_best}')
+    plt.title(f'TBATS Model: Forecasted vs Actual (Testing Set)')
     plt.xlabel('Date')
     plt.ylabel('Load')
     step_hour_ticks = test_df['date'].iloc[::12]
@@ -178,7 +187,7 @@ def tbats_forecasts(input_file, date_range):
     plt.scatter(test_df['load'], best_forecasted_values, alpha=0.5, color='green')
     plt.plot([min(test_df['load']), max(test_df['load'])],
              [min(test_df['load']), max(test_df['load'])], color='red', linestyle='--')
-    plt.title(f'TBATS-Testing Set: R² = {test_r2_best:.2f}')
+    plt.title(f'TBATS-Testing Set')
     plt.xlabel('Actual Values')
     plt.ylabel('Forecasted Values')
     plt.grid()

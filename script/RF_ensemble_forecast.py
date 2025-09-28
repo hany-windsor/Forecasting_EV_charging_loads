@@ -6,6 +6,13 @@ import matplotlib.pyplot as plt
 from sklearn.tree import plot_tree
 import time
 import shap
+import os, random, numpy as np
+from sklearn.model_selection import KFold
+
+os.environ["PYTHONHASHSEED"] = "50"
+SEED = 50
+random.seed(SEED)
+np.random.seed(SEED)
 
 def RF_ensemble(date_range, ensemble_composition, time_series_data_training, time_series_data_testing):
 
@@ -26,12 +33,22 @@ def RF_ensemble(date_range, ensemble_composition, time_series_data_training, tim
         'max_depth': [5, 10],
         'min_samples_split': [2, 5, 10],
         'min_samples_leaf': [1, 2, 4],
-        'max_features': ['auto', 'sqrt'],
+        'max_features': [1.0, 'sqrt'],  # 'auto' deprecated; 1.0 means "all features"
         'bootstrap': [True],
-        'random_state': [50]
+        'random_state': [SEED]
     }
 
-    grid_search = GridSearchCV(RandomForestRegressor(), param_grid, scoring='neg_mean_squared_error', cv=3, verbose=1)
+    cv = KFold(n_splits=3, shuffle=True, random_state=SEED)
+
+    grid_search = GridSearchCV(
+        RandomForestRegressor(n_jobs=1, random_state=SEED),  # explicit + deterministic
+        param_grid,
+        scoring='neg_mean_squared_error',
+        cv=cv,
+        verbose=1,
+        n_jobs=1,  # keep search itself single-threaded too
+        pre_dispatch='1*n_jobs'
+    )
     grid_search.fit(X_train, y_train)
 
     # Best model

@@ -24,11 +24,11 @@ for input_file_name in list_of_dates:
 
 
     # Load forecasted data (training and testing)
-    lstm_forecast_training = pd.read_csv(f"../forecasting_results/lstm_results/LSTM_train_fitted_values_with_dates_{date_range}.csv")
+    lstm_forecast_training = pd.read_csv(f"../forecasting_results/lstm_results/LSTM_train_fitted_values_{date_range}.csv")
     prophet_forecast_training = pd.read_csv(f"../forecasting_results/prophet_results/Prophet_fitted_values_training_{date_range}.csv")
     tbats_forecast_training = pd.read_csv(f"../forecasting_results/tbats_results/tbats_fitting_values_{date_range}.csv")
 
-    lstm_forecast_testing = pd.read_csv(f"../forecasting_results/lstm_results/LSTM_test_forecasted_values_with_dates_{date_range}.csv")
+    lstm_forecast_testing = pd.read_csv(f"../forecasting_results/lstm_results/LSTM_test_forecasted_values_{date_range}.csv")
     prophet_forecast_testing = pd.read_csv(f"../forecasting_results/prophet_results/Prophet_forecasted_values_testing_{date_range}.csv")
     tbats_forecast_testing = pd.read_csv(f"../forecasting_results/tbats_results/tbats_forecasted_values_{date_range}.csv")
 

@@ -1,2 +1,0 @@
-bootstrap,max_depth,max_features,min_samples_leaf,min_samples_split,n_estimators,random_state
-True,10,sqrt,1,2,500,50

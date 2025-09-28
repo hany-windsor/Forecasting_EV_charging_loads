@@ -1,0 +1,16 @@
+
+All seeds are fixed at 50, to ensure reproducibility of the published results
+
+Main files in the script folder	Function
+RF_imputed_outlier_detection_using_isolation_forest_per_hr_energy.py --	to run the data cleaning and outlier manipulation code
+processing_per_unit_time_boulder.py	-- for aggregating loads per hour
+generate_prophet_forecasts.py -- to generate the Prophet forecast
+generate_lstm_forecasts.py	4-- to generate the LSTM forecast
+generate_tbats_forecasts.py	5-- to generate the TBATS forecast
+generate_RF_ensemble_forecasts.py -- to generate the RF forecast
+generate_GEP_forecasts.py	-- to generate the GEP forecast
+evaluation_metrics_testing_sets.py -- to generate the evaluation metrics of the testing sets
+gep_cross_validation_and_learning_curve.py	-- to run the GEP cross validation and learning curve analysis
+rf_cross_validation_and_learning_curve.py	-- to run the RF cross validation and learning curve analysis
+chronos_forecasts.ipynb	-- to generate Chronos forecasts
+DM_statistical_test.py	-- run the DM statistical test

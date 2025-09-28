@@ -1,13 +1,21 @@
 import pandas as pd
 import numpy as np
+import random
+import tensorflow as tf
 from keras.models import Sequential
 from keras.layers import LSTM, Dense
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error, mean_absolute_percentage_error, r2_score
 from itertools import product
 import matplotlib.pyplot as plt
-
 import time
+
+# 🔒 Fix seeds for reproducibility
+seed_value = 50
+random.seed(seed_value)
+np.random.seed(seed_value)
+tf.random.set_seed(seed_value)
+tf.config.experimental.enable_op_determinism()
 
 
 def lstm_forecasts(input_file,date_range):
@@ -126,14 +134,14 @@ def lstm_forecasts(input_file,date_range):
         'date': train_dates.reset_index(drop=True),
         'fitted_values': best_trainPredict.flatten()
     })
-    trainPredict_df.to_csv(f"../forecasting_results/lstm_results/LSTM_train_fitted_values_with_dates_{date_range}.csv", index=False)
+    trainPredict_df.to_csv(f"../forecasting_results/lstm_results/LSTM_train_fitted_values_{date_range}.csv", index=False)
 
     # Save the best forecasted values (testing)
     testPredict_df = pd.DataFrame({
         'date': test_dates.reset_index(drop=True),
         'forecasted_values': best_testPredict.flatten()
     })
-    testPredict_df.to_csv(f"../forecasting_results/lstm_results/LSTM_test_forecasted_values_with_dates_{date_range}.csv", index=False)
+    testPredict_df.to_csv(f"../forecasting_results/lstm_results/LSTM_test_forecasted_values_{date_range}.csv", index=False)
 
     # Ensure datetime format for train_dates and test_dates
     train_dates = pd.to_datetime(train_dates)
@@ -145,13 +153,14 @@ def lstm_forecasts(input_file,date_range):
 
     # Calculate metrics
     train_mse_best = mean_squared_error(scaler.inverse_transform(trainY.reshape(-1, 1)), best_trainPredict)
-    test_mse_best = mean_squared_error(testY_actual, best_testPredict)
     train_mape_best = mean_absolute_percentage_error(scaler.inverse_transform(trainY.reshape(-1, 1)), best_trainPredict)
-    test_mape_best = mean_absolute_percentage_error(testY_actual, best_testPredict)
     train_mae_best = mean_absolute_error(scaler.inverse_transform(trainY.reshape(-1, 1)), best_trainPredict)
-    test_mae_best = mean_absolute_error(testY_actual, best_testPredict)
     train_r2_best = r2_score(scaler.inverse_transform(trainY.reshape(-1, 1)), best_trainPredict)
-    test_r2_best = r2_score(testY_actual, best_testPredict)
+    test_mse_best = mean_squared_error(scaler.inverse_transform(testY.reshape(-1, 1)), best_testPredict)
+    test_mape_best = mean_absolute_percentage_error(scaler.inverse_transform(testY.reshape(-1, 1)), best_testPredict)
+    test_mae_best = mean_absolute_error(scaler.inverse_transform(testY.reshape(-1, 1)), best_testPredict)
+    test_r2_best = r2_score(scaler.inverse_transform(testY.reshape(-1, 1)), best_testPredict)
+
 
     # Define metrics
     metrics = {
@@ -187,7 +196,7 @@ def lstm_forecasts(input_file,date_range):
     plt.figure(figsize=(12, 6))
     plt.plot(test_dates, testY_actual, label='Actual (Testing Set)', color='blue', alpha=0.7)
     plt.plot(test_dates, best_testPredict, label='Forecasted Values', color='green', alpha=0.7)
-    plt.title(f'LSTM Model: Forecasted vs Actual (Testing Set): (MSE = {test_mse_best:.2f})')
+    plt.title(f'LSTM Model: Forecasted vs Actual (Testing Set)')
     plt.xlabel('Date')
     plt.ylabel('Load')
     plt.legend()
@@ -215,7 +224,7 @@ def lstm_forecasts(input_file,date_range):
     plt.figure(figsize=(8, 6))
     plt.scatter(testY_actual, best_testPredict, alpha=0.6, color='green', label='Testing Data')
     #plt.plot(np.unique(testY_actual), np.unique(testY_actual), color='red', label='Ideal Fit')
-    plt.title(f'LSTM-Testing Set: Actual vs Forecasted Values (R² = {test_r2_best:.2f})')
+    plt.title(f'LSTM-Testing Set: Actual vs Forecasted Values')
     plt.xlabel('Actual Load')
     plt.ylabel('Forecasted Load')
     plt.legend()
