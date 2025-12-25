@@ -1,4 +1,17 @@
 
+This repo includes the code developed for the forecasting models published in the article:
+
+Forecasting electric vehicle charging loads using random forest and gene expression programming ensemble models
+Results in Engineering
+Volume 28, December 2025, 108369
+Hany Osman
+Ahmed Azab
+Anas AlGhazi
+Salih Duffuaa
+Fazle Baki
+
+https://www.sciencedirect.com/science/article/pii/S2590123025044135
+
 All seeds are fixed at 50, to ensure reproducibility of the published results
 
 Main files in the script folder	Function
